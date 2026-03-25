@@ -14,11 +14,13 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
     Optional<Link> findByName(String name);
 
+    Optional<Link> findByUrl(String url);
+
     boolean existsByUrl(String url);
 
     Page<Link> findByProjectId(Long projectId, Pageable pageable);
 
     Page<Link> findByTagsName(String tagName, Pageable pageable);
-    
+
     long countByTagsId(Long tagId);
 }
