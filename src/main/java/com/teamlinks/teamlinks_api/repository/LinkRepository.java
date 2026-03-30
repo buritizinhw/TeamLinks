@@ -1,26 +1,18 @@
 package com.teamlinks.teamlinks_api.repository;
 
 import com.teamlinks.teamlinks_api.entity.Link;
-import com.teamlinks.teamlinks_api.entity.Project;
+import com.teamlinks.teamlinks_api.entity.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface LinkRepository extends JpaRepository<Link, Long> {
 
-    Optional<Link> findByName(String name);
+    Page<Link> findAllByProjectId(Long projectId, Pageable pageable);
 
-    Optional<Link> findByUrl(String url);
-
-    boolean existsByUrl(String url);
-
-    Page<Link> findByProjectId(Long projectId, Pageable pageable);
-
-    Page<Link> findByTagsName(String tagName, Pageable pageable);
-
-    long countByTagsId(Long tagId);
+    List<Link> findAllByTagsContaining(Tag tag);
 }
