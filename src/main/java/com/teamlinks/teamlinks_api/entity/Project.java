@@ -1,6 +1,8 @@
 package com.teamlinks.teamlinks_api.entity;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,9 +28,16 @@ public class Project {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Link> links = new ArrayList<>();
+
     @CreationTimestamp
+    @Column(updatable = false)
     private Instant createdAt;
 
-
-
+    @UpdateTimestamp
+    private Instant updatedAt;
 }
