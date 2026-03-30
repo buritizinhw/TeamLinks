@@ -4,5 +4,7 @@ import com.teamlinks.teamlinks_api.entity.Tag;
 
 public record TagResponseDTO(Long id, String name) {
 
-    public static TagResponseDTO fromEntity(Tag tag) { return new TagResponseDTO(tag.getId(), tag.getName());}
+    public static TagResponseDTO fromEntity(Tag tag) {
+        return new TagResponseDTO(tag.getId(), tag.getName());
+    }
 }
