@@ -2,16 +2,18 @@ package com.teamlinks.teamlinks_api.service.link;
 
 import com.teamlinks.teamlinks_api.dto.link.LinkRequestDTO;
 import com.teamlinks.teamlinks_api.dto.link.LinkResponseDTO;
-import java.util.Set;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface LinkService{
+public interface LinkService {
 
-    public LinkResponseDTO createLink(LinkRequestDTO linkRequestDTO, Long projectId);
+    LinkResponseDTO create(Long projectId, LinkRequestDTO dto);
 
-    public LinkResponseDTO findByUrl(String url);
+    LinkResponseDTO findById(Long id);
 
-    public void deleteLink(String url);
+    Page<LinkResponseDTO> findByProjectId(Long projectId, Pageable pageable);
 
-    public LinkResponseDTO updateTags(String url, Set<String> tagNames);
+    LinkResponseDTO update(Long id, LinkRequestDTO dto);
 
+    void delete(Long id);
 }
