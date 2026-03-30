@@ -1,15 +1,17 @@
 package com.teamlinks.teamlinks_api.entity;
 
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.Instant;
-import java.util.Set;
 
 @Entity
 @Table(name = "links")
@@ -29,13 +31,8 @@ public class Link {
     @Column(nullable = false)
     private String name;
 
-    @CreationTimestamp
-    @UpdateTimestamp
-    @Column(nullable = true)
-    private Instant UpdatedAt;
-
-    @Column(nullable = false)
-    private Long clicks=0L;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @ManyToMany
     @JoinTable(
@@ -43,10 +40,16 @@ public class Link {
             joinColumns = @JoinColumn(name = "link_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    private Instant updatedAt;
 }
