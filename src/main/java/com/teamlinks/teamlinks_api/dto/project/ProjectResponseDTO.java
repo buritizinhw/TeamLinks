@@ -1,10 +1,25 @@
 package com.teamlinks.teamlinks_api.dto.project;
-import java.time.Instant;
 
 import com.teamlinks.teamlinks_api.entity.Project;
 
-public record ProjectResponseDTO(Long id,String name,Instant createdAt){        
-    
+import java.time.Instant;
+
+public record ProjectResponseDTO(
+    Long id,
+    String name,
+    String description,
+    int linkCount,
+    Instant createdAt,
+    Instant updatedAt
+) {
     public static ProjectResponseDTO fromEntity(Project project) {
-        return new ProjectResponseDTO(project.getId(), project.getName(), project.getCreatedAt());}
+        return new ProjectResponseDTO(
+            project.getId(),
+            project.getName(),
+            project.getDescription(),
+            project.getLinks() != null ? project.getLinks().size() : 0,
+            project.getCreatedAt(),
+            project.getUpdatedAt()
+        );
+    }
 }
