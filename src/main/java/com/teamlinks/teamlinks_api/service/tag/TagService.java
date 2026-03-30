@@ -2,18 +2,18 @@ package com.teamlinks.teamlinks_api.service.tag;
 
 import com.teamlinks.teamlinks_api.dto.tag.TagRequestDTO;
 import com.teamlinks.teamlinks_api.dto.tag.TagResponseDTO;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TagService {
 
-    public TagResponseDTO create(TagRequestDTO tagRequestDTO);
+    TagResponseDTO create(TagRequestDTO dto);
 
-    public TagResponseDTO findByName(String name);
+    TagResponseDTO findById(Long id);
 
-    public List<TagResponseDTO> findAll();
+    Page<TagResponseDTO> findAll(Pageable pageable);
 
-    public TagResponseDTO update(String oldName, TagRequestDTO tagRequestDTO);
+    TagResponseDTO update(Long id, TagRequestDTO dto);
 
-    public void delete(String name);
-
+    void delete(Long id);
 }

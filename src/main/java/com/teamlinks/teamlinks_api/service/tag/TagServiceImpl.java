@@ -5,50 +5,71 @@ import com.teamlinks.teamlinks_api.dto.tag.TagResponseDTO;
 import com.teamlinks.teamlinks_api.entity.Tag;
 import com.teamlinks.teamlinks_api.repository.LinkRepository;
 import com.teamlinks.teamlinks_api.repository.TagRepository;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
-public class TagServiceImpl implements TagService{
+public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
     private final LinkRepository linkRepository;
 
-
     @Override
-    public TagResponseDTO create(TagRequestDTO tagRequestDTO) {
-        var tag = new Tag();
-        tag.setName(tagRequestDTO.name());
-        if(tagRepository.existsByName(tag.getName())) {
-            throw new IllegalArgumentException("Tag com nome '" + tag.getName() + "' já existe.");
+    @Transactional
+    public TagResponseDTO create(TagRequestDTO dto) {
+        if (tagRepository.existsByName(dto.name())) {
+            throw new IllegalArgumentException("Tag com nome '" + dto.name() + "' já existe.");
         }
-        var savedTag = tagRepository.save(tag);
-        return TagResponseDTO.fromEntity(savedTag);
+
+        var tag = new Tag();
+        tag.setName(dto.name());
+
+        return TagResponseDTO.fromEntity(tagRepository.save(tag));
     }
 
     @Override
-    public TagResponseDTO findByName(String name) {
-
-        return null;
+    public TagResponseDTO findById(Long id) {
+        Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tag com ID " + id + " não encontrada."));
+        return TagResponseDTO.fromEntity(tag);
     }
 
     @Override
-    public List<TagResponseDTO> findAll() {
-        return List.of();
+    public Page<TagResponseDTO> findAll(Pageable pageable) {
+        return tagRepository.findAll(pageable)
+                .map(TagResponseDTO::fromEntity);
     }
 
     @Override
-    public TagResponseDTO update(String oldName, TagRequestDTO tagRequestDTO) {
-        return null;
+    @Transactional
+    public TagResponseDTO update(Long id, TagRequestDTO dto) {
+        Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tag com ID " + id + " não encontrada."));
+
+        if (!tag.getName().equals(dto.name()) && tagRepository.existsByName(dto.name())) {
+            throw new IllegalArgumentException("Tag com nome '" + dto.name() + "' já existe.");
+        }
+
+        tag.setName(dto.name());
+
+        return TagResponseDTO.fromEntity(tagRepository.save(tag));
     }
 
     @Override
-    public void delete(String name) {
+    @Transactional
+    public void delete(Long id) {
+        Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tag com ID " + id + " não encontrada."));
 
+        linkRepository.findAllByTagsContaining(tag)
+                .forEach(link -> link.getTags().remove(tag));
 
+        tagRepository.delete(tag);
     }
 }
