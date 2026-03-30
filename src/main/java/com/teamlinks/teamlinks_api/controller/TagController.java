@@ -1,55 +1,49 @@
 package com.teamlinks.teamlinks_api.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-
 import com.teamlinks.teamlinks_api.dto.tag.TagRequestDTO;
 import com.teamlinks.teamlinks_api.dto.tag.TagResponseDTO;
 import com.teamlinks.teamlinks_api.service.tag.TagService;
-import java.util.List;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/tags")
+@RequiredArgsConstructor
 public class TagController {
 
     private final TagService tagService;
 
-    public TagController(TagService tagService) {
-        this.tagService = tagService;
-    }
-
     @PostMapping
-    public ResponseEntity<TagResponseDTO> create(@Valid @RequestBody TagRequestDTO tagRequestDTO) {
-        TagResponseDTO created = tagService.create(tagRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<TagResponseDTO> findByName(@PathVariable String name) {
-        TagResponseDTO tag = tagService.findByName(name);
-        return ResponseEntity.ok(tag);
+    public ResponseEntity<TagResponseDTO> create(@Valid @RequestBody TagRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tagService.create(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<TagResponseDTO>> findAll() {
-        List<TagResponseDTO> tags = tagService.findAll();
-        return ResponseEntity.ok(tags);
+    public ResponseEntity<Page<TagResponseDTO>> findAll(@PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(tagService.findAll(pageable));
     }
 
-    @PutMapping("/{name}")
+    @GetMapping("/{id}")
+    public ResponseEntity<TagResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(tagService.findById(id));
+    }
+
+    @PutMapping("/{id}")
     public ResponseEntity<TagResponseDTO> update(
-            @PathVariable String name,
-            @Valid @RequestBody TagRequestDTO tagRequestDTO) {
-        
-        TagResponseDTO updated = tagService.update(name, tagRequestDTO);
-        return ResponseEntity.ok(updated);
+            @PathVariable Long id,
+            @Valid @RequestBody TagRequestDTO dto) {
+        return ResponseEntity.ok(tagService.update(id, dto));
     }
 
-    @DeleteMapping("/{name}")
-    public ResponseEntity<Void> delete(@PathVariable String name) {
-        tagService.delete(name);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        tagService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
