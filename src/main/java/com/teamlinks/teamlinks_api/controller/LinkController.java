@@ -1,60 +1,43 @@
 package com.teamlinks.teamlinks_api.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import com.teamlinks.teamlinks_api.dto.link.LinkRequestDTO;
 import com.teamlinks.teamlinks_api.dto.link.LinkResponseDTO;
 import com.teamlinks.teamlinks_api.service.link.LinkService;
-
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/links")
+@RequiredArgsConstructor
 public class LinkController {
 
     private final LinkService linkService;
 
-    public LinkController(LinkService linkService) {
-        this.linkService = linkService;
-    }
-
-    @PostMapping("/{projectId}")
+    @PostMapping("/project/{projectId}")
     public ResponseEntity<LinkResponseDTO> create(
             @PathVariable Long projectId,
-            @Valid @RequestBody LinkRequestDTO linkRequestDTO) {
-        
-        LinkResponseDTO created = linkService.create(linkRequestDTO, projectId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+            @Valid @RequestBody LinkRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(linkService.create(projectId, dto));
     }
 
-    @GetMapping("/{url}")
-    public ResponseEntity<LinkResponseDTO> findByUrl(@PathVariable String url) {
-        LinkResponseDTO link = linkService.findByUrl(url);
-        return ResponseEntity.ok(link);
+    @GetMapping("/{id}")
+    public ResponseEntity<LinkResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(linkService.findById(id));
     }
 
-    @DeleteMapping("/{url}")
-    public ResponseEntity<Void> delete(@PathVariable String url) {
-        linkService.delete(url);
+    @PutMapping("/{id}")
+    public ResponseEntity<LinkResponseDTO> update(
+            @PathVariable Long id,
+            @Valid @RequestBody LinkRequestDTO dto) {
+        return ResponseEntity.ok(linkService.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        linkService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{url}/tags")
-    public ResponseEntity<LinkResponseDTO> updateTags(
-            @PathVariable String url,
-            @RequestBody JsonNode request) {
-        
-        Set<String> tagNames = new HashSet<>();
-        if (request.has("tagNames") && request.get("tagNames").isArray()) {
-            request.get("tagNames").forEach(node -> tagNames.add(node.asText()));
-        }
-        
-        LinkResponseDTO updated = linkService.updateTags(url, tagNames);
-        return ResponseEntity.ok(updated);
     }
 }
