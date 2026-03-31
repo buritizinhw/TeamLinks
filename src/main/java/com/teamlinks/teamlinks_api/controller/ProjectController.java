@@ -7,6 +7,8 @@ import com.teamlinks.teamlinks_api.service.link.LinkService;
 import com.teamlinks.teamlinks_api.service.project.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -28,7 +30,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProjectResponseDTO>> findAll(@PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<Page<ProjectResponseDTO>> findAll(@ParameterObject @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok(projectService.findAll(pageable));
     }
 
@@ -53,7 +55,7 @@ public class ProjectController {
     @GetMapping("/{projectId}/links")
     public ResponseEntity<Page<LinkResponseDTO>> findLinksByProject(
             @PathVariable Long projectId,
-            @PageableDefault(size = 10) Pageable pageable) {
+            @ParameterObject @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok(linkService.findByProjectId(projectId, pageable));
     }
 }

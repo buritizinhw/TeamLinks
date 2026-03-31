@@ -5,6 +5,8 @@ import com.teamlinks.teamlinks_api.dto.tag.TagResponseDTO;
 import com.teamlinks.teamlinks_api.service.tag.TagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -25,7 +27,7 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TagResponseDTO>> findAll(@PageableDefault(size = 20) Pageable pageable) {
+    public ResponseEntity<Page<TagResponseDTO>> findAll(@ParameterObject @PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(tagService.findAll(pageable));
     }
 
