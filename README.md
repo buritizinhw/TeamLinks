@@ -28,11 +28,11 @@ cp .env.example .env
 2. Preencha as variáveis no `.env`:
 
 ```env
-DATABASE_HOST={data}
-DATABASE_PORT={data}
-DATABASE_USERNAME={data}
-DATABASE_PASSWORD={data}
-DATABASE_NAME={data}
+DATABASE_HOST=postgres
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=password
+DATABASE_NAME=postgres
 ```
 
 4. Suba os containers:
