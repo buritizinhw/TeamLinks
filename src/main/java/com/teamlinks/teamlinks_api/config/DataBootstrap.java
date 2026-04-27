@@ -15,15 +15,19 @@ import com.teamlinks.teamlinks_api.repository.LinkRepository;
 import com.teamlinks.teamlinks_api.repository.ProjectRepository;
 import com.teamlinks.teamlinks_api.repository.TagRepository;
 
+import com.teamlinks.teamlinks_api.util.ShortCodeGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 
 @Component
+@Order(0)
 @RequiredArgsConstructor
 public class DataBootstrap implements CommandLineRunner {
 
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
     private final LinkRepository linkRepository;
+    private final ShortCodeGenerator shortCodeGenerator;
 
     @Override
     public void run(String... args) {
@@ -98,6 +102,7 @@ public class DataBootstrap implements CommandLineRunner {
         link.setDescription(description);
         link.setProject(project);
         link.setTags(tags);
+        link.setShortCode(shortCodeGenerator.nextUnique());
         linkRepository.save(link);
     }
 }
