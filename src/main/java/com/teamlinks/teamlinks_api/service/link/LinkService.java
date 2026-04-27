@@ -11,6 +11,8 @@ public interface LinkService {
 
     LinkResponseDTO findById(Long id);
 
+    LinkResponseDTO findByShortCode(String shortCode);
+
     Page<LinkResponseDTO> findByProjectId(Long projectId, Pageable pageable);
 
     LinkResponseDTO update(Long id, LinkRequestDTO dto);
