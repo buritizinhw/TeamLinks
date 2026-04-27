@@ -28,6 +28,7 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_NAME: ${DATABASE_NAME}
+      TEAMLINKS_SHORTENER_PUBLIC_BASE_URL: ${TEAMLINKS_SHORTENER_PUBLIC_BASE_URL:-http://localhost:5006}
     depends_on:
       postgres:
         condition: service_healthy
