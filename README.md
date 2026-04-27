@@ -35,13 +35,15 @@ DATABASE_PASSWORD=password
 DATABASE_NAME=postgres
 ```
 
-4. Suba os containers:
+3. Suba os containers:
 
 ```bash
 docker compose up --build
 ```
 
 A API estará disponível em `http://localhost:8080` e a documentação interativa em `http://localhost:8080/swagger-ui.html`.
+
+**Encurtador (.NET)** — não faz parte deste Compose.Detalhes em `TeamLinks.Shortener/README.md`.
 
 ## Dados iniciais
 
