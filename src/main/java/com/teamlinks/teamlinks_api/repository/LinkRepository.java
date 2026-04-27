@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LinkRepository extends JpaRepository<Link, Long> {
@@ -15,4 +16,8 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     Page<Link> findAllByProjectId(Long projectId, Pageable pageable);
 
     List<Link> findAllByTagsContaining(Tag tag);
+
+    Optional<Link> findByShortCode(String shortCode);
+
+    boolean existsByShortCode(String shortCode);
 }
