@@ -30,3 +30,7 @@ springdoc:
 logging:
   level:
     com.teamlinks: DEBUG
+
+teamlinks:
+  shortener:
+    public-base-url: ${TEAMLINKS_SHORTENER_PUBLIC_BASE_URL:http://localhost:5006}
