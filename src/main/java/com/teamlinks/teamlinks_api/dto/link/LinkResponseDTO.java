@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 public record LinkResponseDTO(
     Long id,
+    String shortCode,
+    String shortUrl,
     String url,
     String name,
     String description,
@@ -18,17 +20,19 @@ public record LinkResponseDTO(
     Instant createdAt,
     Instant updatedAt
 ) {
-    public static LinkResponseDTO fromEntity(Link link) {
+    public static LinkResponseDTO fromEntity(Link link, String shortUrl) {
         return new LinkResponseDTO(
             link.getId(),
+            link.getShortCode(),
+            shortUrl,
             link.getUrl(),
             link.getName(),
             link.getDescription(),
             link.getProject().getId(),
             link.getProject().getName(),
             link.getTags().stream()
-                .map(Tag::getName)
-                .collect(Collectors.toSet()),
+                    .map(Tag::getName)
+                    .collect(Collectors.toSet()),
             link.getCreatedAt(),
             link.getUpdatedAt()
         );
