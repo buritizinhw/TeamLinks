@@ -25,6 +25,9 @@ public class Link {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, length = 16)
+    private String shortCode;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String url;
 
