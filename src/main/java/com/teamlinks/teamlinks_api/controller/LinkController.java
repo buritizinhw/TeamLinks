@@ -23,6 +23,11 @@ public class LinkController {
         return ResponseEntity.status(HttpStatus.CREATED).body(linkService.create(projectId, dto));
     }
 
+    @GetMapping("/ref/{shortCode}")
+    public ResponseEntity<LinkResponseDTO> findByShortCode(@PathVariable String shortCode) {
+        return ResponseEntity.ok(linkService.findByShortCode(shortCode));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<LinkResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(linkService.findById(id));
